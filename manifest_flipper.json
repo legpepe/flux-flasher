@@ -5,6 +5,10 @@
     {
       "chipFamily": "ESP32-S3",
       "parts": [{ "path": "flipper_fw.bin", "offset": 0 }]
+    },
+    {
+      "chipFamily": "esp32s3",
+      "parts": [{ "path": "flipper_fw.bin", "offset": 0 }]
     }
   ]
 }
