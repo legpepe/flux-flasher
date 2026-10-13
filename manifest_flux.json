@@ -1,0 +1,10 @@
+{
+  "name": "Launcher for Flux",
+  "version": "1.0.0",
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [{ "path": "launcher_flux.bin", "offset": 65536 }]
+    }
+  ]
+}

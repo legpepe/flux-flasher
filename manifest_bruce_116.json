@@ -1,0 +1,10 @@
+{
+  "name": "bruce 1.16",
+  "version": "1.16",
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [{ "path": "bruce_116.bin", "offset": 65536 }]
+    }
+  ]
+}

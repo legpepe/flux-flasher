@@ -1,0 +1,10 @@
+{
+  "name": "Flipper fw",
+  "version": "1.0.0",
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [{ "path": "flipper_fw.bin", "offset": 65536 }]
+    }
+  ]
+}

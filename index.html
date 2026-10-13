@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flux Flashing Tool</title>
+    <!-- Подключаем официальный скрипт ESP Web Tools -->
+    <script type="module" src="https://unpkg.com"></script>
+    <style>
+        :root {
+            --bg-color: #090d16;
+            --card-bg: #131926;
+            --accent-cyan: #00f2fe;
+            --accent-purple: #9b51e0;
+            --text-main: #f1f5f9;
+            --text-muted: #64748b;
+            --border: #222f47;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            max-width: 600px;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            width: 100%;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #3b82f6;
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.05);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card h3 {
+            margin: 0 0 12px 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0 0 24px 0;
+            flex-grow: 1;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--accent-cyan);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 18px;
+            width: fit-content;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.purple {
+            background: rgba(155, 81, 224, 0.1);
+            color: #c084fc;
+        }
+
+        /* Кастомизация встроенной кнопки ESP Web Tools */
+        esp-web-install-button {
+            --esp-tools-button-color: #1e293b;
+            --esp-tools-button-text-color: #ffffff;
+            --esp-tools-button-border-radius: 12px;
+            display: block;
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        esp-web-install-button:hover {
+            --esp-tools-button-color: #2563eb;
+        }
+
+        /* Блок благодарностей */
+        .credits-container {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px dashed var(--border);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .credits-block {
+            margin-bottom: 25px;
+        }
+
+        .credits-block h4 {
+            margin: 0 0 12px 0;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .credits-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .credits-list a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .credits-list a:hover {
+            color: var(--accent-purple);
+            text-decoration: underline;
+        }
+
+        .author-text a {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>ESP32 Flashing Hub</h1>
+        <p>Быстрая прошивка Flux. Подключите ваше устройство к ПК с зажатой кнопой < и выберите нужную версию.</p>
+    </div>
+
+    <div class="grid">
+        <!-- Кнопка 1 -->
+        <div class="card">
+            <span class="badge">Bruce 1.16</span>
+            <h3>Bruce 1.16</h3>
+            <p>Последняя стабильная версия Bruce.</p>
+            <esp-web-install-button manifest="./manifest_bruce_116.json"></esp-web-install-button>
+        </div>
+
+        <!-- Кнопка 2 -->
+        <div class="card">
+            <span class="badge">Bruce 1.14</span>
+            <h3>Bruce 1.14</h3>
+            <p>Используйте её, если в более новых версиях у вас возникают проблемы.</p>
+            <esp-web-install-button manifest="./manifest_bruce_114.json"></esp-web-install-button>
+        </div>
+
+        <!-- Кнопка 3 -->
+        <div class="card">
+            <span class="badge purple">Flipper FW</span>
+            <h3>Flipper FW</h3>
+            <p>Порт прошивки Flipper FW для Flux</p>
+            <esp-web-install-button manifest="./manifest_flipper.json"></esp-web-install-button>
+        </div>
+
+        <!-- Кнопка 4 -->
+        <div class="card">
+            <span class="badge purple">Launcher for Flux</span>
+            <h3>Launcher for Flux</h3>
+            <p>Лаунчер портированный на Flux.</p>
+            <esp-web-install-button manifest="./manifest_flux.json"></esp-web-install-button>
+        </div>
+    </div>
+
+    <!-- Раздел авторов и контактов -->
+    <div class="credits-container">
+        <div class="credits-block">
+            <h4>Спасибо за файлы прошивок:</h4>
+            <ul class="credits-list">
+                <li>TG: <a href="https://t.me/@BaZa_dimentiya" target="_blank">@BaZa_dimentiya</a></li>
+                <li>TG: <a href="https://t.me/@wilas0" target="_blank">@wilas0</a></li>
+                <li>TG: <a href="https://t.me/@photorezistor" target="_blank">@photorezistor</a></li>
+            </ul>
+        </div>
+
+        <div class="credits-block" style="margin-bottom: 0;">
+            <h4>Сайт создан Александром:</h4>
+            <ul class="credits-list">
+                <li class="author-text">TG: <a href="https://t.me/@photorezistor" target="_blank">@photorezistor</a></li>
+                <li class="author-text">TT: <a href="https://tiktok.com/@photorezistor" target="_blank">@photorezistor</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        Требуется браузер Chrome, Edge или Opera • На базе Web Serial API
+    </div>
+
+</body>
+</html>
