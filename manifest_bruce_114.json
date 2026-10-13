@@ -3,8 +3,8 @@
   "version": "1.14",
   "builds": [
     {
-      "chipFamily": "ESP32",
-      "parts": [{ "path": "bruce_114.bin", "offset": 65536 }]
+      "chipFamily": "ESP32-S3",
+      "parts": [{ "path": "bruce_114.bin", "offset": 0 }]
     }
   ]
 }
