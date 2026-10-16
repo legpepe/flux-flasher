@@ -124,6 +124,19 @@
             color: #c084fc;
         }
 
+        /* Оранжевый бейдж специально для Marauder */
+        .badge.orange {
+            background: rgba(249, 115, 22, 0.1);
+            color: #f97316;
+        }
+
+        /* Анимация пульсации для метки NEW */
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
         esp-web-install-button {
             --esp-tools-button-color: #1e293b;
             --esp-tools-button-text-color: #ffffff;
@@ -201,6 +214,7 @@
     </div>
 
     <div class="grid">
+        <!-- Кнопка 1 -->
         <div class="card">
             <span class="badge">Bruce 1.16</span>
             <h3>Bruce 1.16</h3>
@@ -208,6 +222,7 @@
             <esp-web-install-button manifest="./manifest_bruce_116.json"></esp-web-install-button>
         </div>
 
+        <!-- Кнопка 2 -->
         <div class="card">
             <span class="badge">Bruce 1.14</span>
             <h3>Bruce 1.14</h3>
@@ -215,6 +230,7 @@
             <esp-web-install-button manifest="./manifest_bruce_114.json"></esp-web-install-button>
         </div>
 
+        <!-- Кнопка 3 -->
         <div class="card">
             <span class="badge purple">Flipper FW</span>
             <h3>Flipper FW</h3>
@@ -222,11 +238,23 @@
             <esp-web-install-button manifest="./manifest_flipper.json"></esp-web-install-button>
         </div>
 
+        <!-- Кнопка 4 -->
         <div class="card">
             <span class="badge purple">Launcher for Flux</span>
             <h3>Launcher for Flux</h3>
             <p>Лаунчер портированный на Flux.</p>
             <esp-web-install-button manifest="./manifest_flux.json"></esp-web-install-button>
+        </div>
+
+        <!-- Кнопка 5: ИСПРАВЛЕНО (Добавлен Marauder с пометкой NEW) -->
+        <div class="card">
+            <span class="badge orange">Marauder</span>
+            <h3 style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                ESP32 Marauder 
+                <span style="font-size: 0.7rem; background: #ef4444; color: #fff; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; animation: pulse 2s infinite; font-weight: bold;">New</span>
+            </h3>
+            <p>Прошивка Marauder портированная на Flux.</p>
+            <esp-web-install-button manifest="./manifest_marauder.json"></esp-web-install-button>
         </div>
     </div>
 
@@ -237,6 +265,7 @@
                 <li><a href="https://t.me/@BaZa_dimentiya" target="_blank">@BaZa_dimentiya</a></li>
                 <li><a href="https://t.me/@wilas0" target="_blank">@wilas0</a></li>
                 <li><a href="https://t.me/@photorezistor" target="_blank">@photorezistor</a></li>
+                <li><a href="https://tiktok.com/@nunokash" target="_blank">@nunokash</a></li>
                 <li><a> </a></li>
             </ul>
         </div>
