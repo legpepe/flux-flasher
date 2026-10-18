@@ -346,44 +346,49 @@
     </div>
 
     <script>
-        // Уникальное имя вашего проекта, чтобы никто чужой не сбросил ваши счетчики
-        const namespace = "flux_flasher_project_2026_unique"; 
+        // Идентификаторы кнопок на вашем сайте
         const buttons = ['bruce_116', 'bruce_114', 'flipper', 'flux', 'marauder'];
 
-        // Загрузка текущих значений из постоянной базы данных Abacus API
-        async function loadCounters() {
-            buttons.forEach(async (id) => {
+        // Функция загрузки сохраненных кликов из памяти localStorage
+        function loadCounters() {
+            buttons.forEach((id) => {
                 try {
-                    const response = await fetch(`https://jasoncameron.dev{namespace}/${id}`);
-                    const data = await response.json();
-                    if (data && data.value !== undefined) {
-                        document.getElementById(`count_${id}`).innerText = data.value;
+                    // Проверяем, есть ли уже сохраненное число для этой кнопки
+                    const savedValue = localStorage.getItem(`thanks_count_${id}`);
+                    const element = document.getElementById(`count_${id}`);
+                    
+                    if (element) {
+                        // Если данные есть — выводим их, если нет — ставим красивый 0
+                        element.innerText = savedValue !== null ? savedValue : "0";
                     }
-                } catch (e) { console.error("Ошибка при чтении счетчика:", e); }
+                } catch (e) { 
+                    console.error("Ошибка чтения из localStorage", e); 
+                }
             });
         }
 
-        // Функция клика "Сказать спасибо" (+1 в общую базу навсегда)
-        async function sendThanks(id) {
+        // Функция клика "Сказать спасибо" (сохраняет +1 в память навсегда)
+        function sendThanks(id) {
             const element = document.getElementById(`count_${id}`);
-            let current = parseInt(element.innerText) || 0;
+            if (!element) return;
+
+            // Считываем текущее число с экрана
+            let currentCount = parseInt(element.innerText) || 0;
+            currentCount++; // Прибавляем единицу
             
-            // Мгновенно увеличиваем на экране для отзывчивости
-            element.innerText = current + 1;
+            // Мгновенно выводим обновленное число на экран
+            element.innerText = currentCount;
 
             try {
-                // Метод /hit/ автоматически увеличивает счетчик в базе и возвращает новую цифру
-                const response = await fetch(`https://jasoncameron.dev{namespace}/${id}`);
-                const data = await response.json();
-                if (data && data.value !== undefined) {
-                    element.innerText = data.value; // Синхронизируем точное число с сервером
-                }
-            } catch (e) { console.error("Ошибка при записи клика:", e); }
+                // Записываем новое значение в постоянную память браузера
+                localStorage.setItem(`thanks_count_${id}`, currentCount);
+            } catch (e) { 
+                console.error("Ошибка записи в localStorage", e); 
+            }
         }
 
-        // Запускаем считывание при открытии и обновляем данные каждые 10 секунд
-        loadCounters();
-        setInterval(loadCounters, 10000);
+        // Автоматически загружаем сохраненные лайки сразу при открытии сайта
+        document.addEventListener("DOMContentLoaded", loadCounters);
     </script>
 
     
