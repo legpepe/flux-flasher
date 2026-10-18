@@ -204,6 +204,47 @@
             font-size: 0.85rem;
             letter-spacing: 0.5px;
         }
+
+        /* Блок для группировки кнопки прошивки и кнопки спасибо */
+        .actions-block {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        /* Кнопка "Сказать спасибо" */
+        .thanks-btn {
+            background: rgba(0, 242, 254, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .thanks-btn:hover {
+            background: rgba(0, 242, 254, 0.15);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* Цифра счетчика */
+        .thanks-count {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-cyan);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        
     </style>
 </head>
 <body>
@@ -219,7 +260,11 @@
             <span class="badge">Bruce 1.16</span>
             <h3>Bruce 1.16</h3>
             <p>Последняя стабильная версия Bruce.</p>
-            <esp-web-install-button manifest="./manifest_bruce_116.json"></esp-web-install-button>
+            <div class="actions-block">
+                <esp-web-install-button manifest="./manifest_bruce_116.json"></esp-web-install-button>
+                <button class="thanks-btn" onclick="sendThanks('bruce_116')">❤️ Сказать спасибо <span class="thanks-count" id="count_bruce_116">0</span></button>
+            </div>
+
         </div>
 
         <!-- Кнопка 2 -->
