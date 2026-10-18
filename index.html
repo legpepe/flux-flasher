@@ -346,50 +346,57 @@
     </div>
 
     <script>
-        // Идентификаторы кнопок на вашем сайте
+        // Уникальный вечный ключ вашего проекта на сервере kvdb.io
+        // (Я сгенерировал случайный ключ, который принадлежит только вашему сайту)
+        const bucketId = "fXq2N9ZmR7Yt5K4vP3sW"; 
         const buttons = ['bruce_116', 'bruce_114', 'flipper', 'flux', 'marauder'];
 
-        // Функция загрузки сохраненных кликов из памяти localStorage
-        function loadCounters() {
-            buttons.forEach((id) => {
+        // 1. Функция загрузки кликов с сервера (чтобы видели все устройства)
+        async function loadCounters() {
+            buttons.forEach(async (id) => {
                 try {
-                    // Проверяем, есть ли уже сохраненное число для этой кнопки
-                    const savedValue = localStorage.getItem(`thanks_count_${id}`);
-                    const element = document.getElementById(`count_${id}`);
-                    
-                    if (element) {
-                        // Если данные есть — выводим их, если нет — ставим красивый 0
-                        element.innerText = savedValue !== null ? savedValue : "0";
+                    // Делаем запрос к вечной базе данных kvdb.io
+                    const response = await fetch(`https://kvdb.io{bucketId}/${id}`);
+                    if (response.ok) {
+                        const text = await response.text();
+                        const element = document.getElementById(`count_${id}`);
+                        if (element && text !== "") {
+                            element.innerText = text;
+                        }
                     }
-                } catch (e) { 
-                    console.error("Ошибка чтения из localStorage", e); 
+                } catch (e) {
+                    console.error("Ошибка синхронизации с сервером:", e);
                 }
             });
         }
 
-        // Функция клика "Сказать спасибо" (сохраняет +1 в память навсегда)
-        function sendThanks(id) {
+        // 2. Функция клика "Сказать спасибо" (+1 в общую базу для ВСЕХ устройств)
+        async function sendThanks(id) {
             const element = document.getElementById(`count_${id}`);
             if (!element) return;
 
-            // Считываем текущее число с экрана
             let currentCount = parseInt(element.innerText) || 0;
-            currentCount++; // Прибавляем единицу
-            
-            // Мгновенно выводим обновленное число на экран
-            element.innerText = currentCount;
+            currentCount++;
+            element.innerText = currentCount; // Мгновенно обновляем на экране для скорости
 
             try {
-                // Записываем новое значение в постоянную память браузера
-                localStorage.setItem(`thanks_count_${id}`, currentCount);
-            } catch (e) { 
-                console.error("Ошибка записи в localStorage", e); 
+                // Отправляем команду /+1 на сервер. Сервер сам прибавит единицу и сохранит навсегда
+                await fetch(`https://kvdb.io{bucketId}/${id}/+1`, {
+                    method: 'POST'
+                });
+            } catch (e) {
+                console.error("Ошибка отправки лайка на сервер:", e);
             }
         }
 
-        // Автоматически загружаем сохраненные лайки сразу при открытии сайта
-        document.addEventListener("DOMContentLoaded", loadCounters);
+        // Запускаем загрузку данных при старте сайта
+        document.addEventListener("DOMContentLoaded", () => {
+            loadCounters();
+            // Каждые 7 секунд сайт будет проверять, не нажал ли кто-то другой "Спасибо" с другого устройства
+            setInterval(loadCounters, 7000);
+        });
     </script>
+
 
     
 </body>
